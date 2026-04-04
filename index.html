@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniGet(觅番社)发布页</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 这里的少量 CSS 仅用于平滑背景渐变动画 */
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-6 text-gray-800">
+
+    <div class="max-w-md w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 text-center transform transition-all hover:scale-[1.01]">
+        
+        <div class="mb-6">
+            <img src="https://aniget.com/android-chrome-192x192.png" class="w-24 h-24 mx-auto bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+        </div>
+
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 mb-2">
+            <span class="text-indigo-600">AniGet 发布页</span>
+        </h1>
+
+        <p class="text-gray-600 leading-relaxed mb-8">
+            最新域名都将在此更新，防迷路。建议收藏！
+        </p>
+
+        <div class="space-y-4">
+            <a href="https://aniget.com" target="_blank" 
+               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-pink-500 text-white rounded-xl font-medium transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95">
+                <i data-lucide="square-mouse-pointer" class="w-5 h-5"></i>
+                访问最新网址
+            </a>
+
+            <button href="https://blog.com" target="_blank" 
+               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-green-500 text-white border border-indigo-100 rounded-xl font-medium transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95" id="installBtn" style="display:none">
+                <i data-lucide="app-window" class="w-5 h-5"></i>
+                安装桌面应用程序
+            </button>
+
+            <a href="https://t.me/joyacg_contact_bot" 
+               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-blue-500 text-white rounded-xl font-medium transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95">
+                <i data-lucide="send" class="w-5 h-5"></i>
+                TG联系
+            </a>
+        </div>
+
+        <div class="mt-10 pt-6 border-t border-gray-100">
+            <p class="text-xs text-gray-400 uppercase tracking-widest">
+                © 2026 AniGet • Built with Tailwind
+            </p>
+        </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+      
+          if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('Service Worker 註冊成功'))
+        .catch(err => console.error('註冊失敗：', err));
+    }
+
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('用户接受安裝');
+          }
+          installBtn.style.display = 'none';
+        });
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA 已安裝');
+      localStorage.setItem('pwaInstalled', 'true');
+    });
+    </script>
+</body>
+</html>
