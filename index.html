@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AniGet(觅番社)发布页</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/android-chrome-192x192.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniGet 觅番社 发布页</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/android-chrome-192x192.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
         body {
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
@@ -23,14 +23,14 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-</style>
+    </style>
 </head>
 <body class="flex items-center justify-center p-6 text-gray-800">
 
     <div class="max-w-md w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 text-center transform transition-all hover:scale-[1.01]">
         
         <div class="mb-6">
-            <img src="/android-chrome-192x192.png" class="w-24 h-24 mx-auto bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+            <img src="/android-chrome-192x192.png" class="w-24 h-24 mx-auto rounded-full shadow-lg border-4 border-white object-cover">
         </div>
 
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 mb-2">
@@ -43,18 +43,19 @@
 
         <div class="space-y-4">
             <a href="https://aniget.com" target="_blank" 
-               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-pink-500 text-white rounded-xl font-medium transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95">
+               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-pink-500 text-white rounded-xl font-medium transition-all hover:bg-pink-600 hover:shadow-lg active:scale-95">
                 <i data-lucide="square-mouse-pointer" class="w-5 h-5"></i>
                 访问最新网址
             </a>
 
-            <button class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-green-500 text-white border border-indigo-100 rounded-xl font-medium transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95" id="installBtn" style="display:none">
+            <button id="installBtn" 
+                class="hidden items-center justify-center gap-2 w-full py-3.5 px-6 bg-green-500 text-white rounded-xl font-medium transition-all hover:bg-green-600 hover:shadow-lg active:scale-95">
                 <i data-lucide="app-window" class="w-5 h-5"></i>
-                安装桌面应用程序
+                <span>安装桌面应用程序</span>
             </button>
 
-            <a href="https://t.me/joyacg_contact_bot" 
-               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-blue-500 text-white rounded-xl font-medium transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95">
+            <a href="https://t.me/joyacg_contact_bot" target="_blank"
+               class="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-blue-500 text-white rounded-xl font-medium transition-all hover:bg-blue-600 hover:shadow-lg active:scale-95">
                 <i data-lucide="send" class="w-5 h-5"></i>
                 TG联系
             </a>
@@ -67,40 +68,35 @@
         </div>
     </div>
 
-<script>
-    lucide.createIcons();
-      
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker 註冊成功'))
-        .catch(err => console.error('註冊失敗：', err));
-    }
-
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        installBtn.style.display = 'inline-block';
-    });
-
-    installBtn.addEventListener('click', () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('用户接受安裝');
-                }
-                installBtn.style.display = 'none';
+    <script>
+        lucide.createIcons();
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Registration Failed', err));
             });
         }
-    });
-
-    window.addEventListener('appinstalled', () => {
-        console.log('PWA 已安裝');
-        localStorage.setItem('pwaInstalled', 'true');
-    });
-</script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden');
+            installBtn.classList.add('flex');
+        });
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            deferredPrompt = null;
+            installBtn.classList.replace('flex', 'hidden');
+        });
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('应用已成功安装到桌面');
+            installBtn.classList.replace('flex', 'hidden');
+        });
+    </script>
 </body>
 </html>
