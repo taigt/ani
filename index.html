@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AniGet(觅番社)发布页</title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* 这里的少量 CSS 仅用于平滑背景渐变动画 */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AniGet(觅番社)发布页</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/android-chrome-192x192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
         body {
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
@@ -19,14 +23,14 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-    </style>
+</style>
 </head>
 <body class="flex items-center justify-center p-6 text-gray-800">
 
     <div class="max-w-md w-full bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 text-center transform transition-all hover:scale-[1.01]">
         
         <div class="mb-6">
-            <img src="https://aniget.com/android-chrome-192x192.png" class="w-24 h-24 mx-auto bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+            <img src="/android-chrome-192x192.png" class="w-24 h-24 mx-auto bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
         </div>
 
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 mb-2">
@@ -63,11 +67,11 @@
         </div>
     </div>
 
-    <script>
-      lucide.createIcons();
+<script>
+    lucide.createIcons();
       
-          if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('Service Worker 註冊成功'))
         .catch(err => console.error('註冊失敗：', err));
     }
@@ -76,27 +80,27 @@
     const installBtn = document.getElementById('installBtn');
 
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'inline-block';
     });
 
     installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('用户接受安裝');
-          }
-          installBtn.style.display = 'none';
-        });
-      }
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('用户接受安裝');
+                }
+                installBtn.style.display = 'none';
+            });
+        }
     });
 
     window.addEventListener('appinstalled', () => {
-      console.log('PWA 已安裝');
-      localStorage.setItem('pwaInstalled', 'true');
+        console.log('PWA 已安裝');
+        localStorage.setItem('pwaInstalled', 'true');
     });
-    </script>
+</script>
 </body>
 </html>
